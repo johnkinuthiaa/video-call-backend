@@ -3,6 +3,7 @@ package com.slippery.videochatappbackend.service;
 import com.slippery.videochatappbackend.dto.UserDto;
 import com.slippery.videochatappbackend.models.User;
 import com.slippery.videochatappbackend.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository repository;
@@ -28,10 +30,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public UserDto logIn(User user) {
         UserDto response =new UserDto();
+        User existingUserEmail =repository.findByEmail(user.getEmail());
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 user.getUsername(),
                 user.getPassword()));
-        if (authentication.isAuthenticated()) {
+
+        if (authentication.isAuthenticated() && existingUserEmail!=null) {
             user.setStatus("active");
             response.setStatusCode(200);
             response.setMessage("user logged in successfully");
