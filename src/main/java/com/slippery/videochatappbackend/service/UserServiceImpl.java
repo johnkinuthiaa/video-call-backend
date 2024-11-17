@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService{
                 user.getUsername(),
                 user.getPassword()));
 
-        if (authentication.isAuthenticated() && existingUserEmail!=null) {
+        if (authentication.isAuthenticated() && Objects.equals(existingUserEmail.getEmail(), user.getEmail()) && Objects.equals(existingUserEmail.getUsername(), user.getUsername())) {
             user.setStatus("active");
             response.setStatusCode(200);
             response.setMessage("user logged in successfully");
