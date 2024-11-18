@@ -6,6 +6,8 @@ import com.slippery.videochatappbackend.service.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/video-app")
 //@CrossOrigin(origins = "http://localhost:5173")
@@ -14,6 +16,10 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+    @GetMapping("/active-users")
+    public ResponseEntity<UserDto> findAllUsernames(){
+        return ResponseEntity.ok(userService.findAllUsernames());
     }
     @GetMapping("/all-users")
     public ResponseEntity<UserDto> getAllUsers(){

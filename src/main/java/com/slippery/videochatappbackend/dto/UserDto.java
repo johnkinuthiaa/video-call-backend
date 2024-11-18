@@ -21,6 +21,7 @@ public class UserDto {
     private String role;
     private String jwtToken;
     private User user;
+    private List<String> usernames;
     private List<User> userList;
 
 }

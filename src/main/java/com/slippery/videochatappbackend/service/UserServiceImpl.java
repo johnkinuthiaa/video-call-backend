@@ -11,6 +11,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -36,8 +37,10 @@ public class UserServiceImpl implements UserService{
                 user.getUsername(),
                 user.getPassword()));
 
+        
         if (authentication.isAuthenticated() && Objects.equals(existingUserEmail.getEmail(), user.getEmail()) && Objects.equals(existingUserEmail.getUsername(), user.getUsername())) {
             user.setStatus("active");
+
             response.setStatusCode(200);
             response.setMessage("user logged in successfully");
             response.setJwtToken(service.generateJwtToken(user.getUsername()));
@@ -81,6 +84,14 @@ public class UserServiceImpl implements UserService{
             response.setStatusCode(204);
             response.setMessage("user list is empty!");
         }
+        return response;
+    }
+
+    @Override
+    public UserDto findAllUsernames() {
+        UserDto response =new UserDto();
+        response.setStatusCode(200);
+        response.setUsernames(repository.findAllUsernames());
         return response;
     }
 }
